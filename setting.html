@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Professional Admin Settings</title>
+<link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+<style>
+    body { margin:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display:flex; background:#f4f6f8; }
+    
+    /* Sidebar */
+    .sidebar {
+        width:250px; min-height:100vh; background:#2c3e50; color:#ecf0f1; padding:20px; box-sizing:border-box; transition:0.3s;
+    }
+    .sidebar h2 { margin-bottom:30px; font-size:24px; }
+    .sidebar a {
+        display:flex; align-items:center; padding:12px 15px; margin-bottom:10px; color:#ecf0f1; text-decoration:none; border-radius:8px; transition:0.3s;
+    }
+    .sidebar a i { margin-right:10px; font-size:18px; }
+    .sidebar a:hover { background:#34495e; }
+
+    /* Main Content */
+    .main { flex:1; padding:30px; box-sizing:border-box; }
+    h1 { margin-top:0; color:#2c3e50; }
+    .section { display:none; }
+
+    /* Card Layout */
+    .card { background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08); margin-bottom:25px; }
+
+    /* Form Elements */
+    .form-group { margin-bottom:18px; }
+    .form-group label { display:block; font-weight:600; margin-bottom:6px; color:#34495e; }
+    .form-group input, .form-group textarea, .form-group select { width:100%; padding:10px; border-radius:8px; border:1px solid #dcdcdc; font-size:15px; transition:0.3s; }
+    .form-group input:focus, .form-group textarea:focus { outline:none; border-color:#2980b9; box-shadow:0 0 5px rgba(41,128,185,0.2); }
+    .form-group button { padding:12px 25px; border:none; border-radius:8px; background:#2980b9; color:#fff; cursor:pointer; font-size:15px; transition:0.3s; }
+    .form-group button:hover { background:#3498db; }
+
+    /* Toggle Switch */
+    .switch { position: relative; display: inline-block; width:50px; height:26px; }
+    .switch input { opacity:0; width:0; height:0; }
+    .slider { position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background-color:#ccc; transition:0.4s; border-radius:26px; }
+    .slider:before { position:absolute; content:""; height:22px; width:22px; left:2px; bottom:2px; background-color:white; transition:0.4s; border-radius:50%; }
+    input:checked + .slider { background-color:#2980b9; }
+    input:checked + .slider:before { transform:translateX(24px); }
+
+    /* Lists */
+    ul { list-style:none; padding-left:0; }
+    li { padding:8px 12px; margin-bottom:5px; border-radius:6px; background:#f9f9f9; border:1px solid #eee; }
+
+    /* Responsive */
+    @media(max-width:768px) {
+        body { flex-direction:column; }
+        .sidebar { width:100%; display:flex; overflow-x:auto; }
+        .sidebar a { flex:1; text-align:center; margin:5px; }
+        .main { padding:15px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Admin Panel</h2>
+    <a onclick="showSection('site')"><i class='bx bx-home-alt-2'></i>Site</a>
+    <a onclick="showSection('appearance')"><i class='bx bx-brush'></i>Appearance</a>
+    <a onclick="showSection('users')"><i class='bx bx-user'></i>Users</a>
+    <a onclick="showSection('payments')"><i class='bx bx-credit-card'></i>Payments</a>
+    <a onclick="showSection('logs')"><i class='bx bx-list-ul'></i>Logs</a>
+</div>
+
+<div class="main">
+
+    <!-- Site Section -->
+    <div id="site" class="section">
+        <h1>Site Settings</h1>
+        <div class="card">
+            <div class="form-group">
+                <label>Site Name</label>
+                <input type="text" placeholder="Enter site name">
+            </div>
+            <div class="form-group">
+                <label>Site URL</label>
+                <input type="text" placeholder="https://example.com">
+            </div>
+            <div class="form-group">
+                <label>Maintenance Mode</label>
+                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+            <div class="form-group">
+                <button>Save Site Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appearance Section -->
+    <div id="appearance" class="section">
+        <h1>Appearance</h1>
+        <div class="card">
+            <div class="form-group">
+                <label>Theme Color</label>
+                <input type="color" value="#2980b9">
+            </div>
+            <div class="form-group">
+                <label>Logo URL</label>
+                <input type="text" placeholder="Enter logo URL">
+            </div>
+            <div class="form-group">
+                <button>Save Appearance</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users Section -->
+    <div id="users" class="section">
+        <h1>Users</h1>
+        <div class="card">
+            <div class="form-group">
+                <label>Add User</label>
+                <input type="text" id="new-user" placeholder="Username">
+                <button onclick="addUser()">Add User</button>
+            </div>
+            <ul id="user-list"></ul>
+        </div>
+    </div>
+
+    <!-- Payments Section -->
+    <div id="payments" class="section">
+        <h1>Payments</h1>
+        <div class="card">
+            <div class="form-group">
+                <label>Payment Gateway</label>
+                <select>
+                    <option>PayPal</option>
+                    <option>Stripe</option>
+                    <option>Bank Transfer</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Currency</label>
+                <input type="text" placeholder="USD">
+            </div>
+            <div class="form-group">
+                <button>Save Payments</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logs Section -->
+    <div id="logs" class="section">
+        <h1>Logs</h1>
+        <div class="card">
+            <ul id="log-list">
+                <li>Site initialized</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function showSection(id){
+    document.querySelectorAll('.section').forEach(sec=>sec.style.display='none');
+    document.getElementById(id).style.display='block';
+}
+
+function addUser(){
+    const username = document.getElementById('new-user').value;
+    if(username){
+        const li = document.createElement('li');
+        li.textContent = username;
+        document.getElementById('user-list').appendChild(li);
+
+        const logLi = document.createElement('li');
+        logLi.textContent = `User ${username} added`;
+        document.getElementById('log-list').appendChild(logLi);
+
+        document.getElementById('new-user').value='';
+    }
+}
+
+// Default section
+showSection('site');
+</script>
+
+</body>
+</html>
